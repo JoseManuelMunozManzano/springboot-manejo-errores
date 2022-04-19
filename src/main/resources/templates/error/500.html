@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ha ocurrido un error Oops!</title>
+</head>
+<body>
+    <h1>Ha ocurrido un error Oops!</h1>
+
+    <!--  Thymeleaf maneja atributos predefinidos para el error  -->
+    <div th:text="${error}"></div>
+    <div th:text="${message}"></div>
+    <div th:text="${status}"></div>
+    <div th:text="${timestamp}"></div>
+    <hr>
+    <!-- La traza no se suele incluir porque se quiere que la página sea amistosa -->
+    <div th:text="${trace}"></div>
+</body>
+</html>

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -32,14 +33,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario resultado = null;
 
         for (Usuario u : this.lista) {
-            // Nota importante.
-            // Se usa el método equals en vez del signo == porque es del tipo OBJETO Integer.
-            // Solo sirve el signo == cuando la lista no supera los 128 elementos, ya que los primeros 128
-            // elementos, la máquina virtual de Java los guarda en caché como valores y como objetos.
-            // Entonces con el signo ==, como evalúa por referencia, a partir del elemento 129 ya es distinta.
-            // Sin embargo, con el método equals, como se evalúa por valor ya no habría problema.
-            //
-            // Si fuera del tipo primitivo int entonces sí se podría usar sin problemas el signo ==
             if (u.getId().equals(id)) {
                 resultado = u;
                 break;
@@ -47,5 +40,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         return resultado;
+    }
+
+    // Una mejora al método obtenerPorId(), usando la característica Optional de Java8
+    @Override
+    public Optional<Usuario> obtenerPorIdOptional(Integer id) {
+        Usuario usuario = obtenerPorId(id);
+        // Con ofNullable convertimos usuario (sea o no null) en tipo Optional
+        // La ventaja de ofNullable sobre of es que el primero acepta null y devolvería empty() en ese caso.
+        return Optional.ofNullable(usuario);
     }
 }

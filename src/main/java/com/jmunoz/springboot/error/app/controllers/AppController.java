@@ -35,14 +35,24 @@ public class AppController {
     @GetMapping("/ver/{id}")
     public String ver(@PathVariable Integer id, Model model) {
         Usuario usuario = usuarioService.obtenerPorId(id);
-
-        // Se va a personalizar la excepción para manejarla de una forma más amistosa, pero solo cuando el usuario sea null.
-        // Ahora ya no es una excepción NullPointerException, sino UsuarioNoEncontradoException.
-        // Un ejemplo de usuario null sería
-        // http://localhost:8080/ver/8
         if (usuario == null) {
             throw new UsuarioNoEncontradoException(id.toString());
         }
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("titulo", "Detalle usuario: ".concat(usuario.getNombre()));
+
+        return "ver";
+    }
+
+    // Mejora al usar Optional
+    // No hace falta la comparación de usuario con null. Se usa el Optional y si es empty() se lanza la excepción
+    // personalizada. No cambia la funcionalidad, solo la forma de implementarlo.
+    // Un ejemplo de usuario null sería
+    // http://localhost:8080/ver/8
+    @GetMapping("/veroptional/{id}")
+    public String verOptional(@PathVariable Integer id, Model model) {
+        Usuario usuario = usuarioService.obtenerPorIdOptional(id).orElseThrow(() -> new UsuarioNoEncontradoException(id.toString()));
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("titulo", "Detalle usuario: ".concat(usuario.getNombre()));

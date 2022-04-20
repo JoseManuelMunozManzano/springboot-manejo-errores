@@ -13,9 +13,15 @@ public class AppController {
 
     @GetMapping("/division0")
     public String divisionPorCero() {
+        Integer valor = 100/0;
+        return "index";
+    }
+
+    @GetMapping("/nonumber")
+    public String numberFormatException() {
         // Manejar este error en una vista propia y personalizada para esta excepción.
         // Ver controlador ErrorHandlerController
-        Integer valor = 100/0;
+        Integer valor = Integer.parseInt("Esto no es un número");
         return "index";
     }
 

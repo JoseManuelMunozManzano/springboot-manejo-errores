@@ -1,5 +1,6 @@
 package com.jmunoz.springboot.error.app.controllers;
 
+import com.jmunoz.springboot.error.app.errors.UsuarioNoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,7 +18,6 @@ public class ErrorHandlerController {
         model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         model.addAttribute("timestamp", new Date());
 
-        // Se puede usar esta vista o la genérica que he creado, aprovechando que las dos vistas son iguales
         return "error/aritmetica";
     }
 
@@ -28,7 +28,14 @@ public class ErrorHandlerController {
         model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         model.addAttribute("timestamp", new Date());
 
-        // Se puede usar esta vista o la genérica que he creado, aprovechando que las dos vistas son iguales
         return "error/numero-formato";
+    }
+
+    @ExceptionHandler(UsuarioNoEncontradoException.class)
+    public String usuarioNoEncontrado(UsuarioNoEncontradoException ex, Model model) {
+        model.addAttribute("error", "Error: Usuario no encontrado!");
+        model.addAttribute("message", ex.getMessage());
+
+        return "error/usuario";
     }
 }

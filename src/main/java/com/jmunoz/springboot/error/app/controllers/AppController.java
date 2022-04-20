@@ -1,5 +1,6 @@
 package com.jmunoz.springboot.error.app.controllers;
 
+import com.jmunoz.springboot.error.app.errors.UsuarioNoEncontradoException;
 import com.jmunoz.springboot.error.app.models.domain.Usuario;
 import com.jmunoz.springboot.error.app.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,15 @@ public class AppController {
     public String ver(@PathVariable Integer id, Model model) {
         Usuario usuario = usuarioService.obtenerPorId(id);
 
-        model.addAttribute("usuario", usuario);
-        // Si el usuario es null, al invocar el método getNombre() va a lanzarse la excepción NullPointerException.
-        //
+        // Se va a personalizar la excepción para manejarla de una forma más amistosa, pero solo cuando el usuario sea null.
+        // Ahora ya no es una excepción NullPointerException, sino UsuarioNoEncontradoException.
         // Un ejemplo de usuario null sería
         // http://localhost:8080/ver/8
+        if (usuario == null) {
+            throw new UsuarioNoEncontradoException(id.toString());
+        }
+
+        model.addAttribute("usuario", usuario);
         model.addAttribute("titulo", "Detalle usuario: ".concat(usuario.getNombre()));
 
         return "ver";
